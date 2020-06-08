@@ -1,0 +1,14 @@
+Qv2ray只是图形界面，它需要v2ray core通信核心支持，才可以正常工作
+
+
+1、打开ubuntu软件中心，搜索qv2ray即可，点击安装
+
+2、下载v2ray core：https://github.com/v2ray/v2ray-core/releases，下载对应的linxu64位版本
+
+3、解压，将v2ray core文件夹移动到qv2ray的目录下：/home/${USER}/snap/qv2ray/
+
+4、配置qv2ray核心：首选项->内核设置->
+
+核心可执行文件路径：v2ray-linux-64/v2ray
+
+V2ray资源目录：v2ray-linxu-64

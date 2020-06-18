@@ -46,9 +46,9 @@
 
 预处理过的文件的 GCC 后缀为`.ii`，它可以通过 `-o` 选项来生成：`g++ -E *.cpp -o *.ii`
 
+#  3 makefile和make
 
-
-## 2.2 makefile和make
+## 3.1 基本使用
 
 当有多个文件要进行编译时，如果使用命令行则会比较繁琐，而且如果经常要修改源文件，又要从头敲命令行进行编译。
 
@@ -56,11 +56,15 @@ makefile这个文件保存的就是编译时要使用的命令行，创建完毕
 
 makefile基本语法：
 
-```shell\
-可执行文件名：目标文件1 目标文件2 ...
-	gcc 目标文件1 目标文件2 ... -o 可执行文件名
-clean：
-	rm -f 目标文件1 目标文件2 ... 可执行文件名
+```shell
+项目名：*.o（依赖的目标文件）
+	g++ *.o -o 项目名
+
+*.o（生成的目标文件）：*.c（依赖的源文件）
+	g++ *.c -o *.o
+
+clean: # 删除原来生成的目标文件和可执行文件
+	rm -rf *.o 项目名
 ```
 
 - `make clean`：编译前先删除原来的文件
@@ -73,7 +77,7 @@ clean：
 
 ```shell
 # 有3个文件，main.cpp, haha.cpp, value.cpp
-g++ -c main.cpp haha.cpp value.cpp -o test
+g++ -c main.cc haha.cc value.cc -o test
 # 每次修改其中以个源文件，都要重新输入这个命令进行编译
 ```
 
@@ -83,15 +87,59 @@ g++ -c main.cpp haha.cpp value.cpp -o test
 test: main.o haha.o value.o
 	g++ main.o haha.o value.o -o test 
 clean: # 删除原来生成的目标文件和可执行文件
-	rm -f main.o haha.o value.o test
+	rm -rf main.o haha.o value.o test
 ```
 
 或使用shell的语法
 
 ```shell
 OBJS=main.o haha.o value.o
+CFLAGS+=-c -g -Wall				# 编译选项
+
 test: ${OBJS}
 	g++ ${OBJS} -o test
+
+main.o:main.cc
+	g++ main.c ${CFLAGS} -o main.o
+	
+haha.o:haha.cc
+	g++ haha.cc ${CFLAGS} -o haha.o
+	
+value.o:value.cc
+	g++ value.cc ${CFLAGS} -o value.o
+
 clean:
-	rm -f ${OBJS} test`
+	rm -rf ${OBJS} test
 ```
+
+或==更简化的版本==
+
+```shell
+OBJS=main.o haha.o value.o
+CC=g++
+CFLAGS+=-c -g -Wall				# 编译选项
+
+test: ${OBJS}
+	${CC} $^ -o $@				# $^表示当前要依赖的文件；$@表示当前要生成的文件
+
+%.o:%.cc						# %表示找到所有源文件，生成所有与之对应的目标文件
+	${CC} $^ ${CFLAGS} -o $@
+
+clean:
+	rm -rf ${OBJS} test
+```
+
+
+
+## 3.1 进阶
+
+## 3.1.1 指定文件目录
+
+makefile默认在当前目录下查找源文件，但是大多数情况下，源文件是分类在不同文件夹下的，因此需要在makefile中指定文件搜索的目录
+
+使用`VPATH`变量就可以完成这个功能，如果定义了这个变量，那么make 就会在当前目录找不到的情况下，到所指定的目录中去找寻文件了
+
+```shell
+VPATH = src:相对路径1:相对路径2:...:相对路径n		# 使用:冒号将路径分隔开
+```
+

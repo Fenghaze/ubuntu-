@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=firefox
+Name[zh_CN]=火狐浏览器
+Comment=火狐浏览器
+Exec=/opt/Firefox-latest-x86_64/firefox/firefox
+Icon=/opt/Firefox-latest-x86_64/firefox/browser/chrome/icons/default/default64.png
+Terminal=false
+Type=Application
+Categories=Application
+Encoding=UTF-8
+StartupNotify=true

@@ -93,9 +93,19 @@ vim是vi的高级版本，有高亮显示、根据文件类型进行语法检测
 
 # 4 使用VSCode的Vim插件
 
+0、安装gcc：`sudo apt-get install gcc`；`sudo apt-get install gcc-multilib`
+
 1、安装VSCode
 
-2、安装Vim和C/C++插件
+2、安装Vim和C/C++插件：
+
+- C/C++：编译环境（必装）
+- C/C++ GUN Global
+- C/C++ Snippets：快速生成代码段
+- EPITECH C/C++ Headers：为C/C++文件添加头部(包括作者、创建和修改日期等),并为.h头文件添加防重复的宏
+- Include Autocomplete：头文件自动补全
+
+
 
 3、打开shell，使用如下命令
 

@@ -112,7 +112,7 @@ clean:
 	rm -rf ${OBJS} test
 ```
 
-或==更简化的版本==
+### ==更简化的版本==
 
 ```shell
 OBJS=main.o haha.o value.o
@@ -120,7 +120,7 @@ CC=g++
 CFLAGS+=-c -g -Wall				# 编译选项
 
 test: ${OBJS}
-	${CC} $^ -o $@				# $^表示当前要依赖的文件；$@表示当前要生成的文件
+	${CC} $^ -o $@				# $^表示当前要依赖的文件 ${OBJS}；$@表示当前要生成的文件 test
 
 %.o:%.cc						# %表示找到所有源文件，生成所有与之对应的目标文件
 	${CC} $^ ${CFLAGS} -o $@
@@ -128,6 +128,26 @@ test: ${OBJS}
 clean:
 	rm -rf ${OBJS} test
 ```
+
+### ==编译带头文件的项目==
+
+假设有：`main.c`、`func1.c`、`func1.h`；其中`main.c`包含`func1.h`头文件
+
+```shell
+CC=gcc
+CFLAGS+=-c -g -Wall
+
+main1: func1.o main1.c	# main1.c 中引入了头文件，无法单独编译生成 main1.o，因此需要最后一起编译
+	$(CC) $^ -o $@
+
+%.o: %.c
+	$(CC) $^ $(CFLAGS) -o $@
+
+clean:
+	rm -rf *.o main1
+```
+
+
 
 
 
@@ -141,5 +161,34 @@ makefile默认在当前目录下查找源文件，但是大多数情况下，源
 
 ```shell
 VPATH = src:相对路径1:相对路径2:...:相对路径n		# 使用:冒号将路径分隔开
+```
+
+
+
+### 3.1.2 生成多个可执行文件
+
+在同一文件夹下，要生成两个或两个以上的可执行文件
+
+添加一个`all：`
+
+如：func1.c, func1.h, main1.c；func2.c, func2.h, main2.c
+
+```shell
+CC=gcc
+CFLAGS+=-c -g -Wall
+
+all: main1 main2		# 生成所有的项目文件
+
+main1: func1.o main1.c
+	$(CC) $^ -o $@
+
+main2: func2.o main2.c
+	$(CC) $^ -o $@
+
+%.o: %.c
+	$(CC) $^ $(CFLAGS) -o $@
+
+clean:
+	rm -rf *.o main1 main
 ```
 

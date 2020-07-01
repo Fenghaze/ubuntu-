@@ -121,3 +121,40 @@ code *.cc #使用vscode打开/创建一个源文件
 - 切分组：CTRL + \
 - 切换到组：CTRL + 1、2、3...
 
+
+
+## 4.2 Debug环境设置
+
+- 1、打开一个项目文件夹
+- 2、点击调试按钮，自动生成一个C/C++的`launch.json`
+  - 这个文件保存在当前项目文件夹下的`.vscode/launch.json`
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "debug hello",  //debug名称
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/hello",  //当前目录下生成的可执行文件
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
+```
+
+- 调试前，需要添加-g编译选项，生成可执行文件
+- 打断点，按F5进入调试模式

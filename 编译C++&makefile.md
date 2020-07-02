@@ -153,6 +153,17 @@ clean:
 
 ## 3.1 进阶
 
+### 3.1.0 当前目录下的所有文件使用统一编译选项
+
+加入`-fopenmp`选项
+
+```makefile
+CFLAGS+=-pthread -g -Wall -fopenmp
+LDFLAGS+=-pthread 
+```
+
+
+
 ## 3.1.1 指定文件目录
 
 makefile默认在当前目录下查找源文件，但是大多数情况下，源文件是分类在不同文件夹下的，因此需要在makefile中指定文件搜索的目录

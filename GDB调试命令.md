@@ -22,9 +22,9 @@ file gdb-sample
 
 （5）在指定函数名或行号处打断点（breakpoint）：b 函数名\行号
 
-（6）打完断点后，**重新运行代码**
+（6）打完断点后，**重新运行（r）代码**
 
-（7）单步跟踪step in，进入函数：s
+（7）单步跟踪n，如果要进入函数，则s
 
 （8）打印变量：p 变量名
 
@@ -81,21 +81,18 @@ b，全称break
 条件断点要打在循环体里面，不能打在for、while所在行
 
 - `b 行号 if condition`：当满足条件时暂停
-- `u`：全称until，跳出循环
+- `u`：全称until，跳出循环； 
 
 
 
 ## 2.2 调试
 
 - `list`：显示一段代码（`l`继续显示代码）
-
 - `r`：若无断点，正常运行程序；否则进入DEBUG模式
-
 - `s`：全称step\start，单步跟踪，进入函数，类似 step in
-
 - `n`：全称next，单步跟踪，不进入函数，类似 step out
-
 - `c`：全称continue，跳到下一个断点
+- `where`：查看堆栈变化
 - `return`：跳出当前函数
 - `finish`：运行当前函数，直到函数返回
 
@@ -120,7 +117,7 @@ b，全称break
 
 
 
-## 2.2 查看、监视变量
+## 2.3 查看、设置、监视变量
 
 p，全称print
 
@@ -130,14 +127,83 @@ p，全称print
 
 
 
+- `set var val_name=val`：设置变量val_name的值为val
+
+
+
 - `display 变量名`：追踪查看具体变量值
 - `undisplay 变量名`：取消追踪
 
 
 
-# 3 多进程调试
+# 3 段错误segment fault、core文件调试
+
+## 3.1 core文件
+
+core文件：有问题的程序运行后，产生“段错误 (核心已转储)”时生成的具有堆栈信息和调试信息的文件。
+
+生成core文件shell命令：
+
+①使用 ulimit -c 查看core开关，如果为0表示关闭，不会生成core文件；
+
+②使用 ulimit -c [filesize] 设置core文件大小，当最小设置为4之后才会生成core文件；
+
+③使用 ulimit -c unlimited 设置core文件大小为不限制，这是常用的做法；
+
+
+
+## 3.2 调试
+
+- `bt`：backtrace，列出调用栈
+- `where`：
+
+
+
+# 4 多进程调试
 
 使用gdb调试的时候，默认只能跟踪父进程，可以在**fork()函数调用前**，通过指令来改变跟踪的进程：
 
-- `set follow-fork-mode child`：跟踪子进程
-- `set follow-fork-mode parent`：跟踪父进程
+- `set follow-fork-mode parent`：调试父进程（默认）
+
+- `set follow-fork-mode child`：调试子进程
+
+- `set detach-on-fork on/off`：默认是on，表示调试当前进程的时候，其他进程正常运行；如果是off，则其他进程被gdb挂起
+
+  
+
+- `info inferiors`：查看调试的进程
+
+- `inferior 进程id`：切换当前调试的进程
+
+  
+
+# 5 多线程调试
+
+线程相关的shell命令：
+
+- 查看当前运行的进程：ps aux | grep 程序名
+- 查看当前运行的轻量级进程：ps -aL | grep 程序名
+- 查看main线程和其他线程的关系：pstree -p 主线程id
+
+
+
+gdb调试命令：
+
+- `info threads`：查看所有线程
+- `thread 线程id`：切换线程
+
+- `set scheduler-locking on`：只运行当前线程，其他线程挂起
+- `set scheduler-locking off`：运行全部线程
+
+
+
+- `thhread apply 线程id cmd`：指定线程执行某gdb命令
+- `thread apply all cmd`：所有线程执行某gdb命令
+
+
+
+# 6 输出日志调试多进程/线程
+
+
+
+# 

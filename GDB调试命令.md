@@ -200,10 +200,3 @@ gdb调试命令：
 - `thhread apply 线程id cmd`：指定线程执行某gdb命令
 - `thread apply all cmd`：所有线程执行某gdb命令
 
-
-
-# 6 输出日志调试多进程/线程
-
-
-
-# 

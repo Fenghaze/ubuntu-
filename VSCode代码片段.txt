@@ -1,0 +1,51 @@
+
+	"Print to console": {
+		"scope": "cpp",
+		"prefix": "cpp",
+		"body": [
+			"/**",
+			" * @author: fenghaze",
+			" * @date: ${CURRENT_YEAR}/${CURRENT_MONTH}/${CURRENT_DATE} ${CURRENT_HOUR}:${CURRENT_MINUTE}",
+			" * @desc: ",
+			" */",
+			"",
+			"#include <stdlib.h>",
+			"#include <stdio.h>",
+			"#include <unistd.h>",
+			"#include <sys/socket.h>",
+			"#include <netinet/in.h>",
+			"#include <arpa/inet.h>",
+			"#include <string.h>",
+			"#include <fcntl.h>",
+			"",
+			"int main(int argc, char const *argv[])",
+			"{",
+			"",
+			"    return 0;",
+			"}",
+		],
+		"description": "A cpp file template."
+	}
+
+
+
+"C C++ Header": {
+		"scope": "c, cpp",
+		"prefix": "header",
+		"description": "Add #ifndef, #define and #endif",
+
+		"body": [
+			"/**",
+			" * @author: fenghaze",
+			" * @date: ${CURRENT_YEAR}/${CURRENT_MONTH}/${CURRENT_DATE} ${CURRENT_HOUR}:${CURRENT_MINUTE}",
+			" * @desc: ",
+			" */",
+			"",
+			"#ifndef ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}_H",
+			"#define ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}_H",
+			"",
+			"$0",
+			"",
+			"#endif // ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}_H"
+		]
+	}

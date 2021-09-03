@@ -21,12 +21,20 @@ cmake_minimum_required(VERSION 3.10)
 #工程的名称
 project(httpServer)
 
+#设置编译选项
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++14")
+set(CMAKE_CXX_COMPLIER "clang++")
+
+# 当前文件夹所有源文件
+aux_source_directory(. DIR_SRCS)
+
 #生成可执行文件 后面是依赖的源文件
-add_executable(server 15-6WebServer.cpp http.cpp)
+add_executable(httpServer ${DIR_SRCS})
 
 #添加pthread编译选项
-find_package(Threads)
-target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})
+# find_package(Threads)
+#target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(httpServer pthread)
 ```
 
 > 执行cmake
@@ -160,6 +168,46 @@ set(HELLO_SRC hello/hello.cpp)
 set(WORLD_SRC world/world.cpp)
 # Target
 add_executable(helloworld main.cpp ${HELLO_SRC} ${WORLD_SRC})
+```
+
+
+
+> 添加外部源文件：world文件夹，相对于main.cpp是外部文件
+
+```cmake
+- main			
+	- hello.cpp
+	- hello.h
+	- CMakeLists.txt		
+	- main.cpp
+- world
+	- world.cpp
+	- world.h
+	- CMakeLists.txt	
+```
+
+> main/CMakeLists.txt
+
+```cmake
+cmake_minimum_required(VERSION 2.8)
+project(hello)
+
+aux_source_directory(. DIRSRCS)
+
+# 添加外部项目的库文件夹
+include_directories(../world)
+# 添加外部项目
+add_subdirectory(../world world)
+
+add_executable(hello ${DIRSRCS})
+target_link_libraries(hello world)
+```
+
+> world/CMakeLists.txt
+
+```cmake
+aux_source_directory(. DIR_WORLD_SRCS)
+add_library(world ${DIR_WORLD_SRCS})
 ```
 
 

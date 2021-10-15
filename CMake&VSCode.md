@@ -21,20 +21,15 @@ cmake_minimum_required(VERSION 3.10)
 #工程的名称
 project(httpServer)
 
-#设置编译选项
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++14")
-set(CMAKE_CXX_COMPLIER "clang++")
-
-# 当前文件夹所有源文件
-aux_source_directory(. DIR_SRCS)
+#设置源文件变量
+set(SRC_LIST 15-6WebServer.cpp http.cpp)
 
 #生成可执行文件 后面是依赖的源文件
-add_executable(httpServer ${DIR_SRCS})
+add_executable(server ${SRC_LIST})
 
 #添加pthread编译选项
-# find_package(Threads)
-#target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(httpServer pthread)
+find_package(Threads)
+target_link_libraries(server ${CMAKE_THREAD_LIBS_INIT})
 ```
 
 > 执行cmake
@@ -66,7 +61,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project (main)
 
-# SRC_LIST源文件目录为 src
+# 源文件目录为 src
 aux_source_directory (src SRC_LIST)
 
 # 依赖的头文件目录为 include
@@ -121,11 +116,12 @@ project(helloworld)
 aux_source_directory(. DIRSRCS)
 # Add header file include directories
 include_directories(./ ./hello ./world)
-# Add block directories
+# 添加子目录
 add_subdirectory(hello)
 add_subdirectory(world)
-# Target
+# 生成可执行文件
 add_executable(helloworld ${DIRSRCS})
+# 链接库
 target_link_libraries(helloworld hello world)
 ```
 
@@ -145,7 +141,7 @@ add_library(world ${DIR_WORLD_SRCS})
 
 
 
-> 多个目录下的源文件
+> 多个目录下的源文件：只在根目录下创建一个CMakeLists.txt
 >
 > ```cmake
 > - CMakeLists.txt		#顶层cmakelist
@@ -172,31 +168,30 @@ add_executable(helloworld main.cpp ${HELLO_SRC} ${WORLD_SRC})
 
 
 
-> 添加外部源文件：world文件夹，相对于main.cpp是外部文件
+> 多个目录下的源文件：在hello目录下使用world目录的文件
+>
+> ```cmake
+> - hello			
+> 	- hello.cpp
+> 	- hello.h
+> 	- CMakeLists.txt
+> - world
+> 	- world.cpp
+> 	- world.h
+> 	- CMakeLists.txt
+> ```
+
+> hello/CMakeLists.txt
 
 ```cmake
-- main			
-	- hello.cpp
-	- hello.h
-	- CMakeLists.txt		
-	- main.cpp
-- world
-	- world.cpp
-	- world.h
-	- CMakeLists.txt	
-```
-
-> main/CMakeLists.txt
-
-```cmake
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.8)
 project(hello)
 
 aux_source_directory(. DIRSRCS)
 
-# 添加外部项目的库文件夹
 include_directories(../world)
-# 添加外部项目
+
+# 需要设置world所在文件路径../world
 add_subdirectory(../world world)
 
 add_executable(hello ${DIRSRCS})
@@ -209,6 +204,8 @@ target_link_libraries(hello world)
 aux_source_directory(. DIR_WORLD_SRCS)
 add_library(world ${DIR_WORLD_SRCS})
 ```
+
+
 
 
 
